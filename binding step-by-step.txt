@@ -1,0 +1,81 @@
+Binding in React-js
+---------------------
+
+(Step-1)
+--------
+
+import React from 'react'
+
+class BindingTest extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state={
+            name:"ajay"
+        }
+    }
+    
+    render() {
+        return (
+            <>
+                <p>{this.state.name}</p>
+            </>
+        )
+    }
+}
+export default BindingTest;
+_______________________________________________________________________________________________________________________________________
+
+(Step-2)
+--------
+import React from 'react';
+import axios from 'axios';
+
+const baseUrl = "http://localhost:3000"; 		  		// <-- this host is linked to node js & mongoDB
+
+class BindingTest extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            firstName: '',
+            lastName: '',
+            dob: "",
+            collage:""
+        }
+    }
+
+    componentDidMount() {
+        this.getDoctorDetails(); 					// <-- this is use  to execute the React code when the component is already placed in the DOM (Document Object Model)
+    }
+
+    getDoctorDetails() {
+        axios.get(`${baseUrl}/api/v1/getuser`, {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
+            }
+        })
+            .then(res => {
+                let docDetails = res.data.result;
+                console.log(res.data.result);  				// <-- to see the datas from mongoDB
+                this.setState({
+                    firstName: docDetails.firstName,
+                    lastName: docDetails.lastName,
+                    dob:docDetails.dob,
+                    collage:res.data.result.doctorDetails.collage , 	// <-- mongoDB path 
+                })
+            })
+            .catch((error) => {
+                alert('Error:', error.response.data.error);         	// <-- display the error in postman
+            });
+    }
+
+   render() {
+        return (
+            <>
+                <p>{this.state.firstName} {this.state.lastName}</p>	// <-- binding the data
+                <p>{this.state.dob} </p>
+                <p>{this.state.collage}</p>
+            </>
+        )
+    }
+}
+export default BindingTest;
