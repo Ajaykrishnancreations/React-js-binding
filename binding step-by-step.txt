@@ -48,7 +48,7 @@ class BindingTest extends React.Component {
     }
 
     getDoctorDetails() {
-        axios.get(`${baseUrl}/api/v1/getuser`, {
+        axios.get(`${baseUrl}/api/v1/getuser`, {        // <-- get the api from postman
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem("token")
             }
